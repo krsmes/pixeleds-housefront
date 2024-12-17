@@ -7,6 +7,7 @@
  */
 
 #include "pixeleds-library.h"
+#include "pixeleds-colors.h"
 
 #define PHOTO_SENSOR A0
 int lightSensorValue;
@@ -15,24 +16,24 @@ int lightSensorValue;
 Pixeleds px = Pixeleds(new PixCol[660] {0}, 660, 0, SK6812W, ORDER_GRB); // house front
 
 // color set 1
-PixCol edgeColor1 = PixCol::BLACK;
+PixCol edgeColor1 = Color::BLACK;
 PixCol mainColor1 = PixCol::hsv(Hue::GREEN, 1.0, 0.1); // very dark
 PixCol lWindowColor1 = PixCol::hsv(Hue::RED, 1.0, 0.1); // very dark
-PixCol lWindowEdgeColor1 = PixCol::BLACK;
+PixCol lWindowEdgeColor1 = Color::BLACK;
 PixCol rWindowColor1 = PixCol::hsv(Hue::RED, 1.0, 0.1); // very dark
-PixCol rWindowEdgeColor1 = PixCol::BLACK;
-PixCol porchCenterColor1 = PixCol::ORANGE_RED;
-PixCol porchEdgeColor1 = PixCol::BLACK;
+PixCol rWindowEdgeColor1 = Color::BLACK;
+PixCol porchCenterColor1 = Color::ORANGE_RED;
+PixCol porchEdgeColor1 = Color::BLACK;
 
 // color set 2
-PixCol edgeColor2 = PixCol::BLACK;
+PixCol edgeColor2 = Color::BLACK;
 PixCol mainColor2 = PixCol::hsv(Hue::RED, 1.0, 0.1); // very dark
 PixCol lWindowColor2 = PixCol::hsv(Hue::GREEN, 1.0, 0.1); // very dark
-PixCol lWindowEdgeColor2 = PixCol::BLACK;
+PixCol lWindowEdgeColor2 = Color::BLACK;
 PixCol rWindowColor2 = PixCol::hsv(Hue::GREEN, 1.0, 0.1); // very dark
-PixCol rWindowEdgeColor2 = PixCol::BLACK;
-PixCol porchCenterColor2 = PixCol::DARK_GOLDEN_ROD;
-PixCol porchEdgeColor2 = PixCol::BLACK;
+PixCol rWindowEdgeColor2 = Color::BLACK;
+PixCol porchCenterColor2 = Color::DARK_ORANGE;
+PixCol porchEdgeColor2 = Color::BLACK;
 
 PixCol gradientColors[] = {
     // FIRST SET
@@ -190,7 +191,7 @@ void initial_fade_in(PixAniData* data) {
     for (int i = 0; i < data->pixelCount; i++) {
         if (i % 2 == 0) {
             // Keep even pixels black for initial fade-in
-            data->pixels[i] = PixCol::BLACK;
+            data->pixels[i] = Color::BLACK;
             continue;
         }
 
@@ -231,7 +232,7 @@ void dynamic_gradient_alternating(PixAniData* data) {
     // Handle first LED flashing
     long flashDuration = FLASH_INTERVAL_MS * holdProgress;
     bool isFlashOn = (data->updated % FLASH_INTERVAL_MS) < flashDuration;
-    data->pixels[0] = isFlashOn ? PixCol::scale(PixCol::GRAY, holdProgress) : PixCol::BLACK;
+    data->pixels[0] = isFlashOn ? PixCol::scale(Color::WHITE, holdProgress) : Color::BLACK;
 
     // Update all other pixels
     for (int i = 1; i < data->pixelCount; i++) {
@@ -256,7 +257,7 @@ void setup() {
     Particle.variable("lightSensor", &lightSensorValue, INT);
 
     px.setup();
-    px.setPixels(PixCol::BLACK);
+    px.setPixels(Color::BLACK);
 
     // Start with initial fade-in animation
     px.startAnimation(&initial_fade_in, &gradientPalette, INITIAL_FADE_IN_MS, INITIAL_FADE_IN_MS);
